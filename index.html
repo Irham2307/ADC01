@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monitoring Potensiometer ESP32</title>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background: #f5f7fa;
+      color: #222;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    h1 {
+      color: #0077cc;
+      margin-bottom: 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      text-align: center;
+      width: 300px;
+    }
+    .value {
+      font-size: 2em;
+      margin: 10px 0;
+      font-weight: bold;
+    }
+    .label {
+      font-size: 1.2em;
+      color: #555;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>📊 Monitoring ADC ESP32</h1>
+  <div class="card">
+    <div class="label">Nilai Potensiometer 1:</div>
+    <div id="pot1" class="value">0</div>
+
+    <div class="label">Nilai Potensiometer 2:</div>
+    <div id="pot2" class="value">0</div>
+  </div>
+
+  <script>
+    // Konfigurasi Firebase (ganti dengan data proyek kamu)
+    const firebaseConfig = {
+      apiKey: "AIzaSyBm-SylGYn8RytwePT_BMCmsk6E0uPnjrk",
+  authDomain: "dataadc.firebaseapp.com",
+  databaseURL: "https://dataadc-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "dataadc",
+  storageBucket: "dataadc.firebasestorage.app",
+  messagingSenderId: "635900193793",
+  appId: "1:635900193793:web:43a10d86d141d0f7cae400",
+  measurementId: "G-2Q5R0999V3"
+    };
+
+    // Inisialisasi Firebase
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    // Referensi ke path /sensor/pot1 dan /sensor/pot2
+    const pot1Ref = database.ref("sensor/pot1");
+    const pot2Ref = database.ref("sensor/pot2");
+
+    // Update nilai real-time dari Firebase
+    pot1Ref.on("value", (snapshot) => {
+      document.getElementById("pot1").innerText = snapshot.val();
+    });
+
+    pot2Ref.on("value", (snapshot) => {
+      document.getElementById("pot2").innerText = snapshot.val();
+    });
+  </script>
+</body>
+</html>
